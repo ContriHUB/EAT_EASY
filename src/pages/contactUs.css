@@ -1,0 +1,77 @@
+/* Container styling */
+.contact-container {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #ffffff;
+}
+
+/* Form styling */
+.contact-form {
+  background-color:  #F4F6FF; /* White background for form to contrast light page */
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Slight shadow for elegance */
+  /* width: 80vh; */
+  max-width: 800px;
+}
+
+/* Label styles */
+.form-label {
+  color: black;
+  font-weight: bold;
+}
+
+.required {
+  color: red;
+}
+
+/* Specific input field styling */
+.email-field input,
+.name-field input,
+.message-field textarea {
+  background-color: #ffffff; /* White background for input fields */
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.email-field input::placeholder,
+.name-field input::placeholder,
+.message-field textarea::placeholder {
+  color: black; /* Black placeholder text */
+}
+
+.email-field input:focus,
+.name-field input:focus,
+.message-field textarea:focus {
+  border-color: #007bff;
+  background-color: #f9f9f9;
+  color: black;
+}
+
+/* Button styling */
+.btn-submit2 {
+  background-color: #124ee4; /* Blue button */
+  border: none;
+  width: 100%;
+  color: white; /* White text */
+  font-weight: bold;
+  border-radius: 5px;
+  transition: transform 0.3s;
+}
+
+.btn-submit2:hover {
+  transform: scale(1.05);
+  background-color: #0b3ba3; /* Darker blue on hover */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact-form {
+    width: 90%;
+  }
+}
