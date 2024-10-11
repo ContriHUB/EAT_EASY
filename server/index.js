@@ -1,52 +1,56 @@
 const express = require("express");
+require("dotenv").config(); // Load environment variables at the top
+
 const app = express();
-require("dotenv").config();
+const REFRESH_TOKEN = process.env.REFRESH_TOKEN
+  ? process.env.REFRESH_TOKEN.toString()
+  : "default_refresh_token"; // Make sure this line comes after dotenv is loaded
+
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 app.use(cors());
-//middleware
+
+// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-const fileUplaod = require("express-fileupload");
+
+const fileUpload = require("express-fileupload"); // Fixed typo here
 app.use(
-  fileUplaod({
+  fileUpload({
     useTempFiles: true,
     tempFileDir: "/tmp/",
   })
 );
 
-//config
+// Config
 const db = require("./config/db");
 db.connect();
 const { cloudinaryConnect } = require("./config/cloudinary");
 cloudinaryConnect();
 
+const userRoutes = require("./routes/user");
+const complaintRoutes = require("./routes/complaint");
+const profileRoutes = require("./routes/profile");
+const menuRoutes = require("./routes/menu");
+const committeeRoutes = require("./routes/committee");
+const dailyExpense = require("./routes/expense");
+const ratingRoutes = require("./routes/rating");
 
-const userRoutes = require('./routes/user');
-const complaintRoutes = require('./routes/complaint');
-const profileRoutes = require('./routes/profile');
-const menuRoutes = require('./routes/menu');
-const committeeRoutes = require('./routes/commitee');
-const dailyExpense = require('./routes/expense');
-const ratingRoutes = require('./routes/rating');
-
-
+// API Routes
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/complaint", complaintRoutes);
 app.use("/api/v1/profile", profileRoutes);
 app.use("/api/v1/menu", menuRoutes);
 app.use("/api/v1/committee", committeeRoutes);
-app.use("/api/v1/expense", dailyExpense)
+app.use("/api/v1/expense", dailyExpense);
 app.use("/api/v1/rating", ratingRoutes);
 
-
-
-//adding defaut route
+// Default route
 app.get("/", (req, res) => {
   return res.json({
     success: true,
-    message: "Your server is up and running up",
+    message: "Your server is up and running",
   });
 });
 

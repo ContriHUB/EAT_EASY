@@ -33,6 +33,10 @@ import ProductWise from "./components/Dashboard/Accountant/ProductWise";
 import CalorieCalculate from "./components/Dashboard/Calorie/CalorieCalculate";
 import IndividualComplaint from "./components/Dashboard/Warden/Committee/IndividualComplaint";
 import ContactForm from "./pages/ContactUs";
+
+console.log("CLIENT_ID:", process.env.CLIENT_ID);
+console.log("CLIENT_SECRET:", process.env.CLIENT_SECRET);
+console.log("REFRESH_TOKEN:", process.env.REFRESH_TOKEN);
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();

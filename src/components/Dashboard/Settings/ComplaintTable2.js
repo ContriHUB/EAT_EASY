@@ -127,205 +127,174 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
   console.log(complaints, "here is your complinats");
   return (
     <>
-      <Table className="rounded-xl border border-richblack-800 ">
+      <Table
+        className="rounded-xl border border-richblack-800"
+        style={{ width: "90%" }} // Set table width to 90%
+      >
         <Thead>
-          <Tr className="flex gap-x-10 rounded-t-md border-b border-b-yellow-100 px-6 py-2">
-            <Th className="flex-1 text-left text-sm font-medium uppercase text-orange-50">
-              Complaints
+          <Tr className="border-b border-b-yellow-100 bg-richblack-700">
+            <Th
+              className="text-sm font-medium uppercase text-orange-50 py-4"
+              style={{
+                width: "30%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }} // Flexbox alignment
+            >
+              Complaint
             </Th>
-            <Th className="text-left text-sm font-medium uppercase text-orange-50">
+
+            <Th
+              className="text-left text-sm font-medium uppercase text-orange-50 py-4"
+              style={{ width: "20%" }}
+            >
               Date
             </Th>
-            <Th className="text-left text-sm font-medium uppercase text-orange-50">
+            <Th
+              className="text-left text-sm font-medium uppercase text-orange-50 py-4"
+              style={{ width: "15%" }}
+            >
               UpVote
             </Th>
-            <Th className="text-left text-sm font-medium uppercase text-orange-50">
+            <Th
+              className="text-left text-sm font-medium uppercase text-orange-50 py-4"
+              style={{ width: "15%" }}
+            >
               DownVote
             </Th>
-            {/* {(user.accountType === ACCOUNT_TYPE.WARDEN ||
-              user.accountType === ACCOUNT_TYPE.ACCOUNTANT) && ( */}
-            {/* <> */}
-            <Th className="text-left text-sm font-medium uppercase text-slate-200">
+            <Th
+              className="text-left text-sm font-medium uppercase text-slate-200 py-4"
+              style={{ width: "20%" }}
+            >
               Delete
             </Th>
-            {/* </>
-            )} */}
           </Tr>
         </Thead>
         <Tbody>
           {complaints?.length === 0 ? (
             <Tr>
-              <Td className="py-10 text-center text-2xl font-medium text-yellow-200">
+              <Td
+                className="py-10 text-center text-2xl font-medium text-yellow-200"
+                colSpan={5}
+              >
                 No Complaint found
-                {/* TODO: Need to change this state */}
               </Td>
             </Tr>
           ) : (
-            complaints?.map((complaint) => (
+            complaints?.map((complaint, index) => (
               <Tr
                 key={complaint._id}
-                className="flex gap-x-10 border-b border-richblack-800 text-green-200 px-6 py-8"
+                className={`text-green-200 ${
+                  index % 2 === 0 ? "bg-richblack-800" : "bg-transparent"
+                }`} // Alternating row colors
               >
-                <>
-                  <Td className="flex flex-1 gap-x-4">
+                <Td className="py-3" style={{ width: "30%" }}>
+                  {/* Centering content using Flexbox */}
+                  <div className="flex flex-col items-center justify-center">
+                    {/* Title centered above the image */}
+                    <p className="text-lg font-semibold text-orange-200 mb-2 text-center">
+                      {complaint.title}
+                    </p>
+                    {/* Image */}
                     <img
                       src={complaint?.img}
                       alt={complaint?.title}
-                      className="h-[148px] w-[220px] rounded-lg object-cover "
+                      className="h-[100px] w-[150px] rounded-lg object-cover mb-2"
                     />
-                    <div className="flex flex-col justify-between">
-                      <p className="text-lg font-semibold text-green-200">
-                        {complaint.title}
-                      </p>
-                      <p className="text-xs text-yellow-200">
-                        {complaint.body.split(" ").length > TRUNCATE_LENGTH
-                          ? complaint.body
-                              .split(" ")
-                              .slice(0, TRUNCATE_LENGTH)
-                              .join(" ") + "..."
-                          : complaint.body}
-                      </p>
-
-                      {(user.accountType === ACCOUNT_TYPE.WARDEN ||
-                        user.accountType === ACCOUNT_TYPE.ACCOUNTANT) && (
-                        <>
-                          {complaint.isResolved ? (
-                            <p className="flex w-fit flex-row items-center gap-2 rounded-full bg-richblack-700 px-2 py-[2px] text-[12px] font-medium text-pink-100">
-                              <HiClock size={14} />
-                              Resolved
-                            </p>
-                          ) : (
-                            <p className="flex w-fit flex-row items-center gap-2 rounded-full bg-richblack-700 px-2 py-[2px] text-[12px] font-medium text-yellow-100">
-                              <div className="flex h-3 w-3 items-center justify-center rounded-full bg-yellow-100 text-richblack-700">
-                                <FaCheck size={8} />
-                              </div>
-                              Unresolved
-                              <button
-                                disabled={loading}
-                                className="bg-slate-500 p-1 text-yellow-200"
-                                onClick={() =>
-                                  handleResolveClick(complaint._id)
-                                }
-                              >
-                                Resolved
-                              </button>
-                              {/* {complaint.isResolved === true && (
-                          <p>Resolve by {complaint.resolvedBy}</p>
-                        )} */}
-                            </p>
-                          )}
-                        </>
-                      )}
-                      {(user.accountType === ACCOUNT_TYPE.STUDENT ||
-                        user.accountType === ACCOUNT_TYPE.MESS_COMMITEE) && (
-                        <>
-                          {complaint.isResolved ? (
-                            <p className="flex w-fit flex-row items-center gap-2 rounded-full bg-richblack-700 px-2 py-[2px] text-[12px] font-medium text-pink-100">
-                              <FaCheck size={14} />
-                              Resolved
-                            </p>
-                          ) : (
-                            <p className="flex w-fit flex-row items-center gap-2 rounded-full bg-richblack-700 px-2 py-[2px] text-[12px] font-medium text-yellow-100">
-                              <HiClock size={8} />
-                              Unresolved
-                            </p>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  </Td>
-                  <Td className="flex gap-x-4">
-                    <p className="text-[20px] text-green-200">
-                      {formattedDate(complaint.createdAt)}
+                    {/* Complaint description below image */}
+                    <p className="text-sm text-yellow-300 text-center">
+                      {complaint.body.split(" ").length > TRUNCATE_LENGTH
+                        ? complaint.body
+                            .split(" ")
+                            .slice(0, TRUNCATE_LENGTH)
+                            .join(" ") + "..."
+                        : complaint.body}
                     </p>
-                  </Td>
-                </>
-                {user.accountType === ACCOUNT_TYPE.STUDENT && (
-                  <>
-                    <Td className="text-sm font-medium text-orange-200 flex flex-col gap-1">
-                      <button
-                        disabled={loading}
-                        className="  text-yellow-200"
-                        onClick={() => onUpvote(complaint._id)}
-                      >
-                        <BiSolidUpvote /> {complaint?.upVotedBy?.length}
-                      </button>
-                    </Td>
-                    <Td className="text-sm font-medium text-orange-200 flex flex-col gap-1">
-                      <button
-                        disabled={loading}
-                        className="text-yellow-200"
-                        onClick={() => onDownvote(complaint._id)}
-                      >
-                        <BiSolidDownvote /> {complaint?.downVotedBy?.length}
-                      </button>
-                    </Td>
-                  </>
-                )}
-                {(user.accountType === ACCOUNT_TYPE.WARDEN ||
-                  user.accountType === ACCOUNT_TYPE.ACCOUNTANT ||
-                  user.accountType === ACCOUNT_TYPE.MESS_COMMITEE) && (
-                  <>
-                    <Td className="text-orange-200 flex flex-col gap-1">
-                      <p>
-                        <BiSolidUpvote /> {complaint?.upVotedBy?.length}
-                      </p>
-                    </Td>
-                    <Td className="text-orange-200 flex flex-col gap-1">
-                      <p>
-                        <BiSolidDownvote /> {complaint?.downVotedBy?.length}
-                      </p>
-                    </Td>
-                  </>
-                )}
-                {/* {(user.accountType === ACCOUNT_TYPE.WARDEN ||
-                  user.accountType === ACCOUNT_TYPE.ACCOUNTANT) && (*/}
-                <>
-                  <Td className="text-sm font-medium text-red-100 ">
-                    <button
-                      disabled={loading}
-                      onClick={() => {
-                        setConfirmationModal({
-                          text1: "Do you want to delete this Complaint?",
-                          text2:
-                            "All the data related to this Complaint will be deleted",
-                          btn1Text: !loading ? "Delete" : "Loading...  ",
-                          btn2Text: "Cancel",
-                          btn1Handler: !loading
-                            ? () => handleComplaintDelete(complaint._id)
-                            : () => {},
-                          btn2Handler: !loading
-                            ? () => setConfirmationModal(null)
-                            : () => {},
-                        });
-                      }}
-                      title="Delete"
-                      className="px-1 transition-all duration-200 hover:scale-110 hover:text-[#ff0000]"
+                    {/* Unresolved/Resolved status */}
+                    <p
+                      className={`mt-4 flex w-fit flex-row items-center gap-2 rounded-full px-2 py-[2px] text-[12px] font-medium ${
+                        complaint.isResolved
+                          ? "bg-green-600 text-white"
+                          : "bg-yellow-500 text-black"
+                      }`}
                     >
-                      <RiDeleteBin6Line size={20} />
-                    </button>
-                  </Td>
-                </>
-                {/*  )} */}
+                      {complaint.isResolved ? (
+                        <FaCheck size={14} />
+                      ) : (
+                        <HiClock size={14} />
+                      )}
+                      {complaint.isResolved ? "Resolved" : "Unresolved"}
+                    </p>
+                  </div>
+                </Td>
+                <Td
+                  className="text-sm font-medium text-green-200 text-left py-3"
+                  style={{ width: "20%" }}
+                >
+                  {formattedDate(complaint.createdAt)}
+                  <br />
+                  {new Date(complaint.createdAt).toLocaleDateString("en-GB")}
+                </Td>
+                <Td
+                  className="text-sm font-medium text-orange-200 py-3"
+                  style={{ width: "15%" }}
+                >
+                  <button
+                    disabled={loading}
+                    className="flex items-center bg-blue-600 text-white rounded-md py-1 px-2 hover:bg-blue-700 transition duration-200"
+                    onClick={() => onUpvote(complaint._id)}
+                  >
+                    <BiSolidUpvote /> {complaint?.upVotedBy?.length}
+                  </button>
+                </Td>
+                <Td
+                  className="text-sm font-medium text-orange-200 py-3"
+                  style={{ width: "15%" }}
+                >
+                  <button
+                    disabled={loading}
+                    className="flex items-center bg-red-600 text-white rounded-md py-1 px-2 hover:bg-red-700 transition duration-200"
+                    onClick={() => onDownvote(complaint._id)}
+                  >
+                    <BiSolidDownvote /> {complaint?.downVotedBy?.length}
+                  </button>
+                </Td>
+                <Td
+                  className="text-sm font-medium text-red-100 py-3"
+                  style={{ width: "20%" }}
+                >
+                  <button
+                    disabled={loading}
+                    onClick={() => {
+                      setConfirmationModal({
+                        text1: "Do you want to delete this Complaint?",
+                        text2:
+                          "All the data related to this Complaint will be deleted",
+                        btn1Text: !loading ? "Delete" : "Loading...",
+                        btn2Text: "Cancel",
+                        btn1Handler: !loading
+                          ? () => handleComplaintDelete(complaint._id)
+                          : () => {},
+                        btn2Handler: !loading
+                          ? () => setConfirmationModal(null)
+                          : () => {},
+                      });
+                    }}
+                    title="Delete"
+                    className="px-1 transition-all duration-200 hover:scale-110 hover:text-[#ff0000]"
+                  >
+                    <RiDeleteBin6Line size={20} />
+                  </button>
+                </Td>
               </Tr>
             ))
           )}
         </Tbody>
       </Table>
-
-      {/* <Table className="rounded-xl border border-richblack-800 ">
-        {loading && <p>Loading...</p>}
-
-        {!loading && !myComplaints.length && (
-          <p>You haven't created any complaints yet.</p>
-        )}
-
-        {!loading && myComplaints.length && (
-          <ComplaintList complaints={myComplaints} />
-        )}
-      </Table> */}
       {confirmationModal && <ConfirmationModal modalData={confirmationModal} />}
     </>
   );
 };
+
 export default ComplaintTable2;
