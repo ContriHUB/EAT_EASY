@@ -71,3 +71,8 @@ export const ratingEndpoints = {
   CREATE_RATING_API: BASE_URL + "/rating/createrating",
   GET_AVG_RATING_API: BASE_URL + "/rating/getavgratingmealwise",
 };
+
+//contactUsEndpoints
+export const contactUsEndpoints = {
+  CREATE_MESSAGE_API: BASE_URL + "/contactUs"
+}
