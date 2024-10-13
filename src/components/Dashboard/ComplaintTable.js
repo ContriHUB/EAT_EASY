@@ -212,11 +212,11 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
             <div className="flex flex-col justify-between">
         
               <p className="text-3xl font-semibold  text-green-200">{complaint.title}</p>
-              <p className="mt-1 text-lg text-yellow-200">
-                {complaint.body.split(" ").length > TRUNCATE_LENGTH
-                  ? complaint.body.split(" ").slice(0, TRUNCATE_LENGTH).join(" ") + "..."
-                  : complaint.body}
-              </p>
+              <p className="mt-1 text-lg text-yellow-200 h-[110px] w-[180px] overflow-hidden text-ellipsis">
+  {complaint.body.split(" ").length > TRUNCATE_LENGTH
+    ? complaint.body.split(" ").slice(0, TRUNCATE_LENGTH).join(" ") + "..."
+    : complaint.body}
+</p>
               {/* Status */}
               {complaint.isResolved ? (
                 <p className="mt-2 flex items-center gap-2 text-lg font-medium text-green-400">
@@ -276,12 +276,12 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
             user.accountType === ACCOUNT_TYPE.MESS_COMMITEE) && (
             <>
               <Td className="p-6">
-                <p className="text-sm font-medium text-green-200">
+                <p className="text-xl font-bold text-green-600">
                   <BiSolidUpvote size={20} /> {complaint?.upVotedBy?.length || 0}
                 </p>
               </Td>
               <Td className="p-6">
-                <p className="text-sm font-medium text-red-200">
+                <p className="text-xl font-bold text-red-600">
                   <BiSolidDownvote size={20} /> {complaint?.downVotedBy?.length || 0}
                 </p>
               </Td>
