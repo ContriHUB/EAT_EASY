@@ -238,7 +238,6 @@ exports.getNutritionDetailsFromMenu = async (req, res) => {
 
     console.log("Mess Menu:", messMenu); // Check if messMenu is null
     
-
     if (!messMenu) {
       return res.status(404).json({
         success: false,

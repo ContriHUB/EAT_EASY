@@ -77,17 +77,18 @@ const CalorieCalculate = () => {
     },
   };
   return (
-    <div>
-      <h2 className="mb-6 mt-11 text-4xl font-serif text-green-400">
+    <div className="p-6 max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-lg">
+      <h2 className="mb-8 mt-8 text-4xl font-serif text-green-400 text-center">
         Calorie Intake Calculator
       </h2>
-      <div className="flex flex-col gap-3">
-        <div>
-          <label className="mr-8 text-xl font-semibold text-white">
+  
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col items-center">
+          <label className="mb-2 text-xl font-semibold text-white">
             Select Day:
           </label>
           <select
-            className="text-gray-600 p-3 bg-gray-50 rounded-lg border"
+            className="text-gray-600 p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm"
             value={selectedDay}
             onChange={(e) => setSelectedDay(e.target.value)}
           >
@@ -101,40 +102,49 @@ const CalorieCalculate = () => {
             <option value="sunday">Sunday</option>
           </select>
         </div>
-
-        <div className="flex flex-wrap">
+  
+        <div className="flex flex-wrap justify-center gap-6">
           {["breakFast", "lunch", "snacks", "dinner"].map((meal) => (
-            <div key={meal} className="mr-4">
+            <div key={meal} className="flex items-center space-x-2">
               <input
                 type="checkbox"
                 checked={selectedMeals[meal]}
                 onChange={() => handleMealChange(meal)}
+                className="h-5 w-5 rounded border-gray-300 focus:ring-blue-500"
               />
-              <label className="ml-2 text-xl font-semibold text-white">
+              <label className="text-xl font-semibold text-white">
                 {meal.charAt(0).toUpperCase() + meal.slice(1)}
               </label>
             </div>
           ))}
         </div>
-
-        <button
-          className="mt-3 py-2 px-4 bg-blue-500 w-fit text-white font-semibold rounded-lg shadow-md hover:bg-blue-700"
-          onClick={handleCalculate}
-        >
-          Calculate Calories
-        </button>
-
+  
+        <div className="flex flex-col items-center">
+          <button
+            className="mt-3 py-2 px-6 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
+            onClick={handleCalculate}
+          >
+            Calculate Calories
+          </button>
+          <span className="mt-2 text-sm font-medium text-white">
+            (Assuming 100g of each food item)
+          </span>
+        </div>
+  
         {nutritionData && (
-          <div className="w-1/3">
-            <h2 className="mb-6 mt-4 text-yellow-300 text-xl font-extrabold p-2">
+          <div className="mt-8 flex flex-col items-center">
+            <h2 className="mb-4 text-yellow-300 text-xl font-extrabold">
               Nutrition Chart
             </h2>
-            <Pie data={chartData} />
+            <div className="w-full max-w-xs">
+              <Pie data={chartData} />
+            </div>
           </div>
         )}
       </div>
     </div>
   );
+  
 };
 
 export default CalorieCalculate;
