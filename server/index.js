@@ -36,6 +36,7 @@ const menuRoutes = require('./routes/menu');
 const committeeRoutes = require('./routes/commitee');
 const dailyExpense = require('./routes/expense');
 const ratingRoutes = require('./routes/rating');
+const contactUsRoute = require('./routes/contactUsRoute');
 
 
 app.use("/api/v1/auth", userRoutes);
@@ -45,6 +46,7 @@ app.use("/api/v1/menu", menuRoutes);
 app.use("/api/v1/committee", committeeRoutes);
 app.use("/api/v1/expense", dailyExpense)
 app.use("/api/v1/rating", ratingRoutes);
+app.use("/api/v1/contactUs", contactUsRoute);
 
 socket.connect(io);
 
