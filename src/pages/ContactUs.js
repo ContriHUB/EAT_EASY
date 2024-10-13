@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './contactUs.css'
+import {contactUsEndpoints} from '../services/apis'
+import {apiConnector} from '../services/apiconnector'
+
+const {CREATE_MESSAGE_API}=contactUsEndpoints;
+
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -12,36 +17,31 @@ const ContactForm = () => {
   const [emailError, setEmailError] = useState('');
   const [messageError, setMessageError] = useState('');
 
-  async function Backendhit() {
-    try{
-      let response = await fetch("/contactUs",{
-      method:"POST",
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body:JSON.stringify(formData)
-      });
-      console.log("object created");
-      let result = await response.json();
-      // alert("Message was submitted successfully");
-      Swal.fire({
-        icon: 'success',
-        title: 'Form Submitted',
-        text: 'Thank you for your message!',
-        confirmButtonText: 'OK'
-      });
-      
-  }
-  catch{
-      console.log("some Error Has occured while creation")
-      // alert(" Oops!!! Some Error occured, RETRY Please !!");
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Please fix the errors and try again!'
-      });
+  async function Backendhit() {  
+  try {
+    const response = await apiConnector(
+      "POST",
+      CREATE_MESSAGE_API,
+      formData
+    );
 
-  }   
+    console.log("object created");
+    Swal.fire({
+      icon: 'success',
+      title: 'Form Submitted',
+      text: 'Thank you for your message!',
+      confirmButtonText: 'OK'
+    });
+  } catch (error) {
+    console.log("some Error Has occured while creation")
+    // alert(" Oops!!! Some Error occured, RETRY Please !!");
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Please fix the errors and try again!'
+    });
+  }
+
   setFormData({
     email: '',
     name: '',
