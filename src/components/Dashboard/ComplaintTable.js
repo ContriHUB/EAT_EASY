@@ -172,35 +172,32 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
   console.log(location.pathname);
   return (
     <>
-      <Table className="w-full rounded-xl border border-richblack-800 bg-richblack-900">
+      <Table className="w-full rounded-lg border border-gray-200 bg-white shadow-md">
         <Thead>
-          <Tr className="bg-richblack-800 text-orange-50">
-            <Th className="py-4 px-40 text-left text-lg font-bold uppercase">
+          <Tr className="bg-gray-100 text-gray-800">
+            <Th className="py-3 px-6 text-left text-md font-semibold uppercase">
               Complaints
             </Th>
-            <Th className="py-4 px-6 text-left text-lg font-bold uppercase">
+            <Th className="py-3 px-4 text-left text-md font-semibold uppercase">
               Date
             </Th>
-            <Th className="py-4 px-6 text-left text-lg font-bold uppercase">
+            <Th className="py-3 px-4 text-left text-md font-semibold uppercase">
               UpVote
             </Th>
-            <Th className="py-4 px-6 text-left text-lg font-bold uppercase">
+            <Th className="py-3 px-4 text-left text-md font-semibold uppercase">
               DownVote
             </Th>
-            {
-              <Th className="py-4 px-6 text-left text-lg font-bold uppercase">
-                Delete
-              </Th>
-            }
+            <Th className="py-3 px-4 text-left text-md font-semibold uppercase">
+              Delete
+            </Th>
           </Tr>
         </Thead>
-        <Tr className="border border-richblack-800 bg-richblack-900 " />
         <Tbody>
           {complaints?.length === 0 ? (
             <Tr>
               <Td
                 colSpan="5"
-                className="py-10 text-center text-2xl font-medium text-yellow-200"
+                className="py-8 text-center text-lg font-medium text-gray-600"
               >
                 No Complaint found
               </Td>
@@ -209,21 +206,20 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
             complaints?.map((complaint) => (
               <Tr
                 key={complaint._id}
-                className="border-b border-richblack-800 hover:bg-richblack-700 transition-all duration-200"
+                className="border-b border-gray-200 hover:bg-gray-50 transition-all duration-200"
               >
                 {/* Complaint Image and Title */}
-                <div></div>
-                <Td className="flex gap-x-4 p-6 align-top">
+                <Td className="flex gap-4 p-4 align-top">
                   <img
                     src={complaint?.img}
                     alt={complaint?.title}
-                    className="h-[148px] w-[180px] rounded-lg object-cover"
+                    className="h-24 w-28 rounded-md object-cover"
                   />
                   <div className="flex flex-col justify-between">
-                    <p className="text-3xl font-semibold  text-green-200">
+                    <p className="text-lg font-semibold text-gray-900">
                       {complaint.title}
                     </p>
-                    <p className="mt-1 text-lg text-yellow-200 h-[110px] w-[180px] overflow-hidden text-ellipsis">
+                    <p className="mt-1 text-sm text-gray-600 line-clamp-3">
                       {complaint.body.split(" ").length > TRUNCATE_LENGTH
                         ? complaint.body
                             .split(" ")
@@ -231,18 +227,18 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
                             .join(" ") + "..."
                         : complaint.body}
                     </p>
-
-                    {/* Status */}
                     {complaint.isResolved ? (
-                      <p className="mt-2 flex items-center gap-2 text-lg font-medium text-green-400"></p>
+                      <p className="mt-2 flex items-center gap-2 text-sm font-medium text-green-500">
+                        Resolved
+                      </p>
                     ) : (
-                      <p className="mt-2 flex items-center gap-2 text-sm font-medium text-yellow-100">
+                      <p className="mt-2 flex items-center gap-2 text-sm font-medium text-yellow-500">
                         <HiClock /> Unresolved
                         {(user.accountType === ACCOUNT_TYPE.WARDEN ||
                           user.accountType === ACCOUNT_TYPE.ACCOUNTANT) && (
                           <button
                             disabled={loading}
-                            className="ml-3 bg-green-600 px-2 py-1 text-xs font-medium text-white rounded transition-all duration-150 hover:bg-green-700"
+                            className="ml-3 bg-green-500 px-2 py-1 text-xs font-medium text-white rounded transition-all duration-150 hover:bg-green-600"
                             onClick={() => handleResolveClick(complaint._id)}
                           >
                             Mark Resolved
@@ -254,30 +250,29 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
                 </Td>
 
                 {/* Complaint Date */}
-                <Td className="p-6">
-                  <p className="text-xl text-green-200 font-semibold">
-                    {new Date(complaint.createdAt).toLocaleDateString("en-GB")}{" "}
-                    {/* Date formatted to DD/MM/YYYY */}
+                <Td className="p-4">
+                  <p className="text-md text-gray-700">
+                    {new Date(complaint.createdAt).toLocaleDateString("en-GB")}
                   </p>
                 </Td>
 
                 {/* Upvote/Downvote for Students */}
                 {user.accountType === ACCOUNT_TYPE.STUDENT && (
                   <>
-                    <Td className="p-6">
+                    <Td className="p-4">
                       <button
                         disabled={loading}
-                        className="flex items-center gap-2 text-xl font-bold text-green-600 hover:text-green-800"
+                        className="flex items-center gap-1 text-md font-semibold text-green-500 hover:text-green-700"
                         onClick={() => onUpvote(complaint._id)}
                       >
                         <BiSolidUpvote size={20} />{" "}
                         {complaint?.upVotedBy?.length || 0}
                       </button>
                     </Td>
-                    <Td className="p-6">
+                    <Td className="p-4">
                       <button
                         disabled={loading}
-                        className="flex items-center gap-2 text-xl font-bold text-red-600 hover:text-red-800"
+                        className="flex items-center gap-1 text-md font-semibold text-red-500 hover:text-red-700"
                         onClick={() => onDownvote(complaint._id)}
                       >
                         <BiSolidDownvote size={20} />{" "}
@@ -292,14 +287,14 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
                   user.accountType === ACCOUNT_TYPE.ACCOUNTANT ||
                   user.accountType === ACCOUNT_TYPE.MESS_COMMITEE) && (
                   <>
-                    <Td className="p-6">
-                      <p className="text-xl font-bold text-green-600">
+                    <Td className="p-4">
+                      <p className="text-md font-semibold text-green-500">
                         <BiSolidUpvote size={20} />{" "}
                         {complaint?.upVotedBy?.length || 0}
                       </p>
                     </Td>
-                    <Td className="p-6">
-                      <p className="text-xl font-bold text-red-600">
+                    <Td className="p-4">
+                      <p className="text-md font-semibold text-red-500">
                         <BiSolidDownvote size={20} />{" "}
                         {complaint?.downVotedBy?.length || 0}
                       </p>
@@ -308,48 +303,35 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
                 )}
 
                 {/* Delete Option for Warden/Accountant */}
-                {
-                  <Td className="p-6">
-                    <button
-                      disabled={loading}
-                      className="text-red-400 hover:text-red-600 transition-all duration-200"
-                      onClick={() => {
-                        setConfirmationModal({
-                          text1: "Do you want to delete this Complaint?",
-                          text2:
-                            "All the data related to this Complaint will be deleted.",
-                          btn1Text: !loading ? "Delete" : "Loading...",
-                          btn2Text: "Cancel",
-                          btn1Handler: !loading
-                            ? () => handleComplaintDelete(complaint._id)
-                            : () => {},
-                          btn2Handler: !loading
-                            ? () => setConfirmationModal(null)
-                            : () => {},
-                        });
-                      }}
-                    >
-                      <RiDeleteBin6Line size={20} />
-                    </button>
-                  </Td>
-                }
+                <Td className="p-4">
+                  <button
+                    disabled={loading}
+                    className="text-red-400 hover:text-red-600 transition-all duration-200"
+                    onClick={() => {
+                      setConfirmationModal({
+                        text1: "Do you want to delete this Complaint?",
+                        text2:
+                          "All the data related to this Complaint will be deleted.",
+                        btn1Text: !loading ? "Delete" : "Loading...",
+                        btn2Text: "Cancel",
+                        btn1Handler: !loading
+                          ? () => handleComplaintDelete(complaint._id)
+                          : () => {},
+                        btn2Handler: !loading
+                          ? () => setConfirmationModal(null)
+                          : () => {},
+                      });
+                    }}
+                  >
+                    <RiDeleteBin6Line size={20} />
+                  </button>
+                </Td>
               </Tr>
             ))
           )}
         </Tbody>
       </Table>
 
-      {/* <Table className="rounded-xl border border-richblack-800 ">
-        {loading && <p>Loading...</p>}
-
-        {!loading && !myComplaints.length && (
-          <p>You haven't created any complaints yet.</p>
-        )}
-
-        {!loading && myComplaints.length && (
-          <ComplaintList complaints={myComplaints} />
-        )}
-      </Table> */}
       {confirmationModal && <ConfirmationModal modalData={confirmationModal} />}
     </>
   );
