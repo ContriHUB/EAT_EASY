@@ -13,11 +13,12 @@ const {
   addMessMenu,
   editMessMenu,
   viewMessMenu,
+  getNutritionDetailsFromMenu,
 } = require("../controllers/menuController");
-const { getNutritionDetails } = require("../controllers/menuController");
+// const { getNutritionDetails } = require("../controllers/menuController");
 
 router.post("/addMenu", auth, notStudent, addMessMenu);
 router.put("/editMenu", auth, notStudent, editMessMenu);
 router.get("/viewMenu", auth, viewMessMenu);
-router.post("/getnutrition", auth, getNutritionDetails);
+router.post("/getnutrition", auth, getNutritionDetailsFromMenu);
 module.exports = router;
