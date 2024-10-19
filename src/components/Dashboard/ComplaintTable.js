@@ -25,6 +25,7 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
   const { token } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
   const [confirmationModal, setConfirmationModal] = useState(null);
+  const [expandedComplaints, setExpandedComplaints] = useState([]); // Track expanded complaints
   const TRUNCATE_LENGTH = 30;
   const location = useLocation();
   useEffect(() => {
@@ -63,6 +64,19 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
       });
     }
   });
+
+  const toggleExpand = (complaintId) => {
+    setExpandedComplaints((prev) => {
+      if (prev.includes(complaintId)) {
+        // If already expanded, remove it from the list
+        return prev.filter((id) => id !== complaintId);
+      } else {
+        // If not expanded, add it to the list
+        return [...prev, complaintId];
+      }
+    });
+  };
+
   const onUpvote = async (complaintId) => {
     console.log("complaint ID in UP", complaintId);
     try {
@@ -94,6 +108,7 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
 
   //  ******
   // HANDLE DOWNVOTE *************************************
+
   const onDownvote = async (complaintId) => {
     console.log("complaint ID in DV", complaintId);
     try {
@@ -152,6 +167,7 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
       console.error("Error while resolving complaint:", error.message);
     }
   };
+  const isExpanded = (complaintId) => expandedComplaints.includes(complaintId);
 
   const handleComplaintDelete = async (complaintId) => {
     setLoading(true);
@@ -168,171 +184,158 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
     setConfirmationModal(null);
     setLoading(false);
   };
-  console.log(complaints, "here is your complinats");
-  console.log(location.pathname);
+  //console.log(complaints, "here is your complinats");
+  //console.log(location.pathname);
   return (
     <>
-      <Table className="w-full rounded-lg border border-gray-200 bg-white shadow-md">
-        <Thead>
-          <Tr className="bg-gray-100 text-gray-800">
-            <Th className="py-3 px-6 text-left text-md font-semibold uppercase">
-              Complaints
-            </Th>
-            <Th className="py-3 px-4 text-left text-md font-semibold uppercase">
-              Date
-            </Th>
-            <Th className="py-3 px-4 text-left text-md font-semibold uppercase">
-              UpVote
-            </Th>
-            <Th className="py-3 px-4 text-left text-md font-semibold uppercase">
-              DownVote
-            </Th>
-            <Th className="py-3 px-4 text-left text-md font-semibold uppercase">
-              Delete
-            </Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {complaints?.length === 0 ? (
-            <Tr>
-              <Td
-                colSpan="5"
-                className="py-8 text-center text-lg font-medium text-gray-600"
-              >
-                No Complaint found
-              </Td>
-            </Tr>
-          ) : (
-            complaints?.map((complaint) => (
-              <Tr
-                key={complaint._id}
-                className="border-b border-gray-200 hover:bg-gray-50 transition-all duration-200"
-              >
-                {/* Complaint Image and Title */}
-                <Td className="flex gap-4 p-4 align-top">
-                  <img
-                    src={complaint?.img}
-                    alt={complaint?.title}
-                    className="h-24 w-28 rounded-md object-cover"
-                  />
-                  <div className="flex flex-col justify-between">
-                    <p className="text-lg font-semibold text-gray-900">
-                      {complaint.title}
-                    </p>
-                    <p className="mt-1 text-sm text-gray-600 line-clamp-3">
-                      {complaint.body.split(" ").length > TRUNCATE_LENGTH
-                        ? complaint.body
-                            .split(" ")
-                            .slice(0, TRUNCATE_LENGTH)
-                            .join(" ") + "..."
-                        : complaint.body}
-                    </p>
-                    {complaint.isResolved ? (
-                      <p className="mt-2 flex items-center gap-2 text-sm font-medium text-green-500">
-                        Resolved
-                      </p>
-                    ) : (
-                      <p className="mt-2 flex items-center gap-2 text-sm font-medium text-yellow-500">
-                        <HiClock /> Unresolved
-                        {(user.accountType === ACCOUNT_TYPE.WARDEN ||
-                          user.accountType === ACCOUNT_TYPE.ACCOUNTANT) && (
-                          <button
-                            disabled={loading}
-                            className="ml-3 bg-green-500 px-2 py-1 text-xs font-medium text-white rounded transition-all duration-150 hover:bg-green-600"
-                            onClick={() => handleResolveClick(complaint._id)}
-                          >
-                            Mark Resolved
-                          </button>
-                        )}
-                      </p>
-                    )}
-                  </div>
-                </Td>
+<div className="grid grid-cols-1 gap-6 p-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+  {complaints?.length === 0 ? (
+    <p className="col-span-full text-center text-lg font-medium text-gray-600">
+      No Complaint found
+    </p>
+  ) : (
+    complaints?.map((complaint) => (
+      <div
+        key={complaint._id}
+        className="flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md transition-all duration-200 hover:shadow-lg h-full"
+      >
+        {/* Complaint Image */}
+        <img
+          src={complaint?.img}
+          alt={complaint?.title}
+          className="h-40 w-full object-cover"
+        />
 
-                {/* Complaint Date */}
-                <Td className="p-4">
-                  <p className="text-md text-gray-700">
-                    {new Date(complaint.createdAt).toLocaleDateString("en-GB")}
-                  </p>
-                </Td>
+        {/* Complaint Details */}
+        <div className="flex flex-col p-4 flex-grow">
+          <div className="flex-grow"> {/* Allows title and body to grow */}
+            <p className="text-lg font-semibold text-gray-900">
+              {complaint.title.split(" ").length > 5
+                ? complaint.body.split(" ").slice(0, 5).join(" ") + "..."
+                : complaint.title}
+            </p>
+            <p className="mt-1 text-sm text-gray-600">
+              {isExpanded(complaint._id)
+                ? complaint.body // Display full text when expanded
+                : complaint.body.split(" ").length > 10
+                ? complaint.body.split(" ").slice(0, 10).join(" ") + "..."
+                : complaint.body}
+            </p>
+          </div>
 
-                {/* Upvote/Downvote for Students */}
-                {user.accountType === ACCOUNT_TYPE.STUDENT && (
-                  <>
-                    <Td className="p-4">
-                      <button
-                        disabled={loading}
-                        className="flex items-center gap-1 text-md font-semibold text-green-500 hover:text-green-700"
-                        onClick={() => onUpvote(complaint._id)}
-                      >
-                        <BiSolidUpvote size={20} />{" "}
-                        {complaint?.upVotedBy?.length || 0}
-                      </button>
-                    </Td>
-                    <Td className="p-4">
-                      <button
-                        disabled={loading}
-                        className="flex items-center gap-1 text-md font-semibold text-red-500 hover:text-red-700"
-                        onClick={() => onDownvote(complaint._id)}
-                      >
-                        <BiSolidDownvote size={20} />{" "}
-                        {complaint?.downVotedBy?.length || 0}
-                      </button>
-                    </Td>
-                  </>
-                )}
-
-                {/* For Warden/Accountant/Mess Committee */}
-                {(user.accountType === ACCOUNT_TYPE.WARDEN ||
-                  user.accountType === ACCOUNT_TYPE.ACCOUNTANT ||
-                  user.accountType === ACCOUNT_TYPE.MESS_COMMITEE) && (
-                  <>
-                    <Td className="p-4">
-                      <p className="text-md font-semibold text-green-500">
-                        <BiSolidUpvote size={20} />{" "}
-                        {complaint?.upVotedBy?.length || 0}
-                      </p>
-                    </Td>
-                    <Td className="p-4">
-                      <p className="text-md font-semibold text-red-500">
-                        <BiSolidDownvote size={20} />{" "}
-                        {complaint?.downVotedBy?.length || 0}
-                      </p>
-                    </Td>
-                  </>
-                )}
-
-                {/* Delete Option for Warden/Accountant */}
-                <Td className="p-4">
-                  <button
-                    disabled={loading}
-                    className="text-red-400 hover:text-red-600 transition-all duration-200"
-                    onClick={() => {
-                      setConfirmationModal({
-                        text1: "Do you want to delete this Complaint?",
-                        text2:
-                          "All the data related to this Complaint will be deleted.",
-                        btn1Text: !loading ? "Delete" : "Loading...",
-                        btn2Text: "Cancel",
-                        btn1Handler: !loading
-                          ? () => handleComplaintDelete(complaint._id)
-                          : () => {},
-                        btn2Handler: !loading
-                          ? () => setConfirmationModal(null)
-                          : () => {},
-                      });
-                    }}
-                  >
-                    <RiDeleteBin6Line size={20} />
-                  </button>
-                </Td>
-              </Tr>
-            ))
+          {/* Read More / Show Less Button */}
+          {complaint.body.split(" ").length > TRUNCATE_LENGTH && (
+            <button
+              className="mt-2 text-left text-blue-500 text-sm hover:underline"
+              onClick={() => toggleExpand(complaint._id)}
+            >
+              {expandedComplaints.includes(complaint._id)
+                ? "Show Less"
+                : "Read More"}
+            </button>
           )}
-        </Tbody>
-      </Table>
 
-      {confirmationModal && <ConfirmationModal modalData={confirmationModal} />}
+          {/* Complaint Status */}
+          {complaint.isResolved ? (
+            <p className="mt-2 flex items-center gap-2 text-sm font-medium text-green-500">
+              Resolved
+            </p>
+          ) : (
+            <p className="mt-2 flex items-center gap-2 text-sm font-medium text-yellow-500">
+              <HiClock /> Unresolved
+              {(user.accountType === ACCOUNT_TYPE.WARDEN ||
+                user.accountType === ACCOUNT_TYPE.ACCOUNTANT) && (
+                <button
+                  disabled={loading}
+                  className="ml-3 bg-green-500 px-2 py-1 text-xs font-medium text-white rounded transition-all duration-150 hover:bg-green-600"
+                  onClick={() => handleResolveClick(complaint._id)}
+                >
+                  Mark Resolved
+                </button>
+              )}
+            </p>
+          )}
+
+          {/* Complaint Date and Created By */}
+          <div className="flex justify-between items-center mt-2">
+            <p className="text-md text-gray-700">
+              {new Date(complaint.createdAt).toLocaleDateString("en-GB")}
+            </p>
+            <p className="text-md text-gray-700">Created by {user.firstName}</p>
+          </div>
+        </div>
+
+        {/* Button Row for Upvote, Downvote, and Delete */}
+        <div className="flex justify-between p-4 border-t border-gray-200 bg-gray-50">
+          {/* Upvote/Downvote for Students */}
+          {user.accountType === ACCOUNT_TYPE.STUDENT && (
+            <div className="flex gap-2">
+              <button
+                disabled={loading}
+                className="flex items-center gap-1 text-md font-semibold text-green-500 hover:text-green-700"
+                onClick={() => onUpvote(complaint._id)}
+              >
+                <BiSolidUpvote size={20} />{" "}
+                {complaint?.upVotedBy?.length || 0}
+              </button>
+              <button
+                disabled={loading}
+                className="flex items-center gap-1 text-md font-semibold text-red-500 hover:text-red-700"
+                onClick={() => onDownvote(complaint._id)}
+              >
+                <BiSolidDownvote size={20} />{" "}
+                {complaint?.downVotedBy?.length || 0}
+              </button>
+            </div>
+          )}
+
+          {/* For Warden/Accountant/Mess Committee */}
+          {(user.accountType === ACCOUNT_TYPE.WARDEN ||
+            user.accountType === ACCOUNT_TYPE.ACCOUNTANT ||
+            user.accountType === ACCOUNT_TYPE.MESS_COMMITEE) && (
+            <div className="flex gap-2">
+              <p className="text-md font-semibold text-green-500">
+                <BiSolidUpvote size={20} />{" "}
+                {complaint?.upVotedBy?.length || 0}
+              </p>
+              <p className="text-md font-semibold text-red-500">
+                <BiSolidDownvote size={20} />{" "}
+                {complaint?.downVotedBy?.length || 0}
+              </p>
+            </div>
+          )}
+
+          {/* Delete Option for Warden/Accountant */}
+          <button
+            disabled={loading}
+            className="flex items-center justify-center text-red-400 hover:text-red-600 transition-all duration-200"
+            onClick={() => {
+              setConfirmationModal({
+                text1: "Do you want to delete this Complaint?",
+                text2: "All the data related to this Complaint will be deleted.",
+                btn1Text: !loading ? "Delete" : "Loading...",
+                btn2Text: "Cancel",
+                btn1Handler: !loading
+                  ? () => handleComplaintDelete(complaint._id)
+                  : () => {},
+                btn2Handler: !loading
+                  ? () => setConfirmationModal(null)
+                  : () => {},
+              });
+            }}
+          >
+            <RiDeleteBin6Line size={20} />
+          </button>
+        </div>
+      </div>
+    ))
+  )}
+
+  {confirmationModal && (
+    <ConfirmationModal modalData={confirmationModal} />
+  )}
+</div>
+
     </>
   );
 };
