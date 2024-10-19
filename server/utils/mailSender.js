@@ -8,7 +8,7 @@ const oAuth2Client = new google.auth.OAuth2(
   process.env.CLIENT_SECRET,
   REDIRECT_URI
 );
-const REFRESH_TOKEN = process.env.REFRESH_TOKEN.toString();
+const REFRESH_TOKEN = process.env.REFRESH_TOKEN?.toString();
 // console.log(REFRESH_TOKEN);
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 console.log("oAuth2Client credentials set");

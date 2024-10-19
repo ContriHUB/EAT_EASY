@@ -5,6 +5,7 @@ import { setMessMenu, setNutritionDetails } from "../../slices/messMenuSlice";
 import { setError } from "../../slices/complaintSlice";
 import { useSelect } from "@material-tailwind/react";
 import { useSelector } from "react-redux";
+import axios from "axios";
 const { GET_MESS_MENU_API, EDIT_MESS_MENU_API, GET_NUTRITION_DETAILS_API } =
   menuEndpoints;
 export const fetchMessMenu = async (token, dispatch) => {
@@ -83,24 +84,59 @@ export const editMessMenuDetails = async (data, menuId, token) => {
 };
 
 // get calorie intake
-export const getNutritionDetails = async (token, itemName, itemQuantity) => {
+// export const getNutritionDetails = async (token, itemName, itemQuantity) => {
+//   const toastId = toast.loading("Loading...");
+//   try {
+//     console.log("token", token);
+//     const response = await apiConnector(
+//       "POST",
+//       GET_NUTRITION_DETAILS_API,
+//       { itemName, itemQuantity },
+//       {
+//         Authorization: `Bearer ${token}`,
+//       }
+//     );
+//     console.log("NUTRITION DETAILS API RESPONSE............", response);
+//     console.log("response.data.success", response?.data?.success);
+//     if (response?.data?.success === true) {
+//       // Dispatch success action and update the Redux state
+//       // Assuming you have a setNutritionDetails action, replace it with the actual action you're using
+//       // dispatch(setNutritionDetails(response?.data?.data));
+//       toast.success("Nutrition details fetched successfully");
+//       return response?.data; // Return the nutrition data
+//     } else {
+//       // If the response does not indicate success, throw an error
+//       throw new Error("Could Not Fetch Nutrition Details");
+//     }
+//   } catch (error) {
+//     console.log("NUTRITION DETAILS API ERROR............", error);
+//     toast.error(error.message);
+//     // Dispatch error action and update the Redux state
+//     // dispatch(setError(error.message)); // Remove this line if you don't have an 'setError' action
+//     return null; // Return null to indicate an error
+//   } finally {
+//     // Dismiss the loading toast regardless of success or error
+//     toast.dismiss(toastId);
+//   }
+// };
+
+// Function to fetch nutrition details from the backend
+export const getNutritionDetailsFromMenu = async (token, day, selectedMeals) => {
   const toastId = toast.loading("Loading...");
   try {
-    console.log("token", token);
-    const response = await apiConnector(
-      "POST",
-      GET_NUTRITION_DETAILS_API,
-      { itemName, itemQuantity },
-      {
-        Authorization: `Bearer ${token}`,
-      }
-    );
+      const response = await apiConnector(
+        "POST",
+        GET_NUTRITION_DETAILS_API,
+        { day, selectedMeals },
+        {
+          Authorization: `Bearer ${token}`,
+        }
+      );
+    // );
+
     console.log("NUTRITION DETAILS API RESPONSE............", response);
     console.log("response.data.success", response?.data?.success);
     if (response?.data?.success === true) {
-      // Dispatch success action and update the Redux state
-      // Assuming you have a setNutritionDetails action, replace it with the actual action you're using
-      // dispatch(setNutritionDetails(response?.data?.data));
       toast.success("Nutrition details fetched successfully");
       return response?.data; // Return the nutrition data
     } else {
@@ -110,8 +146,6 @@ export const getNutritionDetails = async (token, itemName, itemQuantity) => {
   } catch (error) {
     console.log("NUTRITION DETAILS API ERROR............", error);
     toast.error(error.message);
-    // Dispatch error action and update the Redux state
-    // dispatch(setError(error.message)); // Remove this line if you don't have an 'setError' action
     return null; // Return null to indicate an error
   } finally {
     // Dismiss the loading toast regardless of success or error
