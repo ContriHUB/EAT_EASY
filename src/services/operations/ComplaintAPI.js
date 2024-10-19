@@ -366,30 +366,82 @@ export const fetchMostVotedComplaints = async (token) => {
 };
 
 // get complaints by id
-export const fetchComplaintById = async (complaintId, token) => {
+// export const fetchComplaintById = async (complaintId, token) => {
+//   try {
+//     const response = await apiConnector(
+//       "GET",
+//       `http://localhost:4000/api/v1/complaint/getComplaintById/${complaintId}`,
+//       null,
+//       {
+//         Authorization: `Bearer ${token}`,
+//       }
+//     );
+
+//     console.log("Complaint by ID API RESPONSE: ", response);
+    
+
+//     if (!response?.data?.success) {
+//       throw new Error("Could Not Fetch Complaint by ID");
+//     }
+
+//     const complaint = response?.data?.complaint;
+//     return complaint;
+//   } catch (error) {
+//     console.error("Error fetching complaint by ID:", error);
+//     throw error;
+//   }
+// };
+
+export const fetchComplaintById = async (complaintId) => {
   try {
+    console.log("Fetching complaint with ID:", complaintId);
+    
     const response = await apiConnector(
       "GET",
       `http://localhost:4000/api/v1/complaint/getComplaintById/${complaintId}`,
-      null,
-      {
-        Authorization: `Bearer ${token}`,
-      }
+      null
     );
 
-    console.log("Complaint by ID API RESPONSE: ", response);
-
+    console.log("Complaint by ID API RESPONSE: ", JSON.stringify(response, null, 2));
+    
     if (!response?.data?.success) {
       throw new Error("Could Not Fetch Complaint by ID");
     }
 
-    const complaint = response?.data?.complaint;
+    const complaint = response.data.complaint;
+    console.log("Fetched Complaint:", complaint);
+    
     return complaint;
   } catch (error) {
-    console.error("Error fetching complaint by ID:", error);
+    console.error("Error fetching complaint by ID:", error.message);
     throw error;
   }
 };
+
+// export const fetchComplaintById = async (complaintId) => {
+//   try {
+//     console.log("Fetching complaint with ID:", complaintId); // Log the complaint ID
+//     const response = await apiConnector(
+//       "GET",
+//       `http://localhost:4000/api/v1/complaint/getComplaintById/${complaintId}`,
+//       null
+//     );
+
+//     console.log("Complaint by ID API RESPONSE: ", response);
+    
+//     if (!response?.data?.success) {
+//       throw new Error("Could Not Fetch Complaint by ID");
+//     }
+
+//     const complaint = response?.data?.complaint;
+//     console.log("Fetched Complaint:", complaint); // Log the fetched complaint
+//     return complaint;
+//   } catch (error) {
+//     console.error("Error fetching complaint by ID:", error);
+//     throw error;
+//   }
+// };
+
 
 // adding comment to complaint
 export const addCommentToComplaint = async (complaintId, comment, token) => {
