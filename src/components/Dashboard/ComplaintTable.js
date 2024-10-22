@@ -1,6 +1,7 @@
-import { React, useState, useEffect } from "react";
+import  React,{useState, useEffect } from "react";
 import { Table, Tbody, Td, Th, Thead, Tr } from "react-super-responsive-table";
 import { useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 import {
   fetchAllMyComplaints,
   deleteComplaint,
@@ -184,6 +185,13 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
     setConfirmationModal(null);
     setLoading(false);
   };
+  const navigate = useNavigate();
+
+  const handleComplaintClick = (id) => {
+      //console.log("id "+id);
+      navigate(`/complaint/${id}`);
+  };
+
   //console.log(complaints, "here is your complinats");
   //console.log(location.pathname);
   return (
@@ -209,7 +217,7 @@ const ComplaintTable2 = ({ complaints, setComplaint }) => {
         {/* Complaint Details */}
         <div className="flex flex-col p-4 flex-grow">
           <div className="flex-grow"> {/* Allows title and body to grow */}
-            <p className="text-lg font-semibold text-gray-900">
+            <p className="text-lg font-semibold text-gray-900 cursor-pointer" key={complaint._id} onClick={() => handleComplaintClick(complaint._id)}>
               {complaint.title.split(" ").length > 5
                 ? complaint.body.split(" ").slice(0, 5).join(" ") + "..."
                 : complaint.title}

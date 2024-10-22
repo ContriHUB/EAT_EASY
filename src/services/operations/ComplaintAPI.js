@@ -392,14 +392,18 @@ export const fetchMostVotedComplaints = async (token) => {
 //   }
 // };
 
-export const fetchComplaintById = async (complaintId) => {
+// 
+export const fetchComplaintById = async (complaintId, token) => {
   try {
     console.log("Fetching complaint with ID:", complaintId);
     
     const response = await apiConnector(
       "GET",
       `http://localhost:4000/api/v1/complaint/getComplaintById/${complaintId}`,
-      null
+      null,
+      {
+        Authorization: `Bearer ${token}`, // Include token here
+      }
     );
 
     console.log("Complaint by ID API RESPONSE: ", JSON.stringify(response, null, 2));
@@ -444,6 +448,8 @@ export const fetchComplaintById = async (complaintId) => {
 
 
 // adding comment to complaint
+
+
 export const addCommentToComplaint = async (complaintId, comment, token) => {
   console.log("comment", comment);
   console.log("complaintId", complaintId);

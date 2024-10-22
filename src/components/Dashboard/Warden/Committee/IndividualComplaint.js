@@ -193,161 +193,143 @@ const IndividualComplaint = () => {
   };
 
   return (
-    <>
-      <div>
-        <form className="flex max-w-[1000px] justify-between">
-          <div className="flex flex-col gap-y-2">
-            <div className="flex flex-row gap-2 mt-6 mb-2">
-              <label className="mr-8 text-yellow-200 font-bold text-2xl">
-                Title:
-              </label>
-              <h1 className="mr-8 text-white font-serif text-2xl">
-                {complaint?.title}
-              </h1>
-            </div>
-
-            <div className="flex flex-row gap-2">
-              <div className="flex flex-row gap-2">
-                <img
-                  src={complaint?.img}
-                  alt={complaint?.title}
-                  className="h-[300px] w-[400px] rounded-lg object-cover "
-                />
-              </div>
-
-              <div className="flex flex-col gap-2 ml-5">
-                <label className="mr-8 text-yellow-100 font-semibold">
-                  Complaint Desc:
-                </label>{" "}
-                <h1 className=" text-white font-serif">{complaint?.body}</h1>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-row gap-2">
-                <label className="mt-2 text-yellow-200">UpVote: </label>
-
-                <h1 className="mr-6 mt-2.5 text-white">
-                  {upvotes}
-                </h1>
-                <label className="mt-2 text-yellow-200 ">DownVote: </label>
-
-                <h1 className="mr-6 mt-2.5 text-gray-100">
-                  {downvotes}
-                </h1>
-              </div>
-              <div className="flex flex-row gap-2">
-                <label className="mb-2 text-yellow-200">
-                  Status of Complaint:
-                </label>
-                <h1
-                  className="font-semibold"
-                  style={{ color: complaint?.isResolved ? "green" : "red" }}
-                >
-                  {complaint?.isResolved ? "Resolved" : "Unresolved"}
-                </h1>
-                {complaint?.isResolved && (
-                  <h1 style={{ color: "green" }}>
-                    {" "}
-                    by
-                    {complaint?.resolvedBy?.firstName}
-                  </h1>
-                )}
-              </div>
-
-              <div className="flex flex-row align-center gap-2">
-                {/* add resolved by */}
-                <label className=" text-yellow-200">Created By:</label>
-
-                <h1 className="mb-1 text-pink-100 font-sans">
-                  {complaint?.author?.firstName} {complaint?.author?.lastName}
-                </h1>
-              </div>
-            </div>
-
-            {/* Add more fields as needed */}
-
-            <div className="flex flex-col gap-2">
-              <div>
-                {/* <textarea
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  placeholder="Add your comment..."
-                /> */}
-
-                <label
-                  htmlFor="message"
-                  className="block mb-2  text-lg font-medium text-gray-900 dark:text-white"
-                >
-                  Your message
-                </label>
-                <textarea
-                  id="message"
-                  rows="3"
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  class="block p-1  w-full text-l text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Write your thoughts here..."
-                ></textarea>
-
-                <button
-                  className="ml-50 mt-3 mb-3 py-2 px-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-                  onClick={handleAddComment}
-                >
-                  Add Comment
-                </button>
-              </div>
-              <button
-                onClick={() => {
-                  handleGetComments();
-                  setShowComments(true);
-                }}
-                disabled={isLoadingComments}
-                className=" mt-3 mb-3 py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-              >
-                {isLoadingComments
-                  ? "Loading Comments..."
-                  : "Show All Comments"}
-              </button>
-              {showComments && (
-                <ul className="form-style text-white">
-                  {comments.map((comment) => (
-                    <div key={comment._id}>
-                      <div className="mx-auto my-8 flex max-w-screen-sm rounded-xl border border-gray-100 p-4 text-left text-white-600 shadow-lg sm:p-8">
-                        <div className="w-full text-left">
-                          <div className="mb-2 flex flex-col justify-between text-white-600 sm:flex-row">
-                            <h3 className="font-medium">{comment?.userName}</h3>
-                            <time className="text-xs" dateTime={comment.createdAt}>
-                              {formattedDate(comment.createdAt)}
-                            </time>
-                          </div>
-                          <p className="text-sm">{comment.text}</p>
-                          <div className="flex gap-2 mt-2">
-                            <button
-                              className="flex items-center text-yellow-200"
-                              onClick={(e) => handleCommentUpvote(e, comment._id)}
-                            >
-                              <BiSolidUpvote /> {comment.upVotedBy.length}
-                            </button>
-                            <button
-                              className="flex items-center text-yellow-200"
-                              onClick={(e) => handleCommentDownvote(e, comment._id)}
-                            >
-                              <BiSolidDownvote /> {comment.downVotedBy.length}
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
-          {/* You can also add buttons, submit handlers, etc. */}
-        </form>
+<>
+  <div className="bg-gray-100 p-5 rounded-lg shadow-lg max-w-4xl mx-auto mt-2">
+    <form className="flex flex-col gap-8">
+      {/* Title Section */}
+      <div className="flex flex-col items-center text-center">
+        <label className="text-black text-4xl mb-2">Title</label>
+        <h1 className="text-black font-serif text-2xl">{complaint?.title}</h1>
       </div>
-    </>
+
+      {/* Complaint Image and Description */}
+      <div className="flex flex-col items-center gap-6">
+        <img
+          src={complaint?.img}
+          alt={complaint?.title}
+          className="h-[300px] w-[600px] rounded-lg object-cover shadow-lg"
+        />
+        <div className="flex flex-col items-center text-center gap-2">
+          <label className="text-black font-semibold text-lg">
+            Complaint Description
+          </label>
+          <h1 className="text-gray-600 ">{complaint?.body}</h1>
+        </div>
+      </div>
+
+      {/* Votes and Status */}
+      <div className="flex flex-col items-center gap-4">
+        
+        <div className="flex flex-row items-center justify-between gap-16">
+  {/* Upvotes and Downvotes */}
+  <div className="flex items-center gap-2">
+    <label className="text-black text-lg">UpVote:</label>
+    <h1 className="text-gray-600">{upvotes}</h1>
+    <label className="text-black text-lg">DownVote:</label>
+    <h1 className="text-gray-600">{downvotes}</h1>
+  </div>
+
+  {/* Status of Complaint */}
+  <div className="flex items-center gap-2">
+    <label className="text-black text-lg">Status of Complaint:</label>
+    <h1
+      className="font-semibold"
+      style={{ color: complaint?.isResolved ? "green" : "red" }}
+    >
+      {complaint?.isResolved ? "Resolved" : "Unresolved"}
+    </h1>
+    {complaint?.isResolved && (
+      <h1 style={{ color: "green" }}>
+        by {complaint?.resolvedBy?.firstName}
+      </h1>
+    )}
+  </div>
+</div>
+
+
+        {/* Author Information */}
+        <div className="flex flex-row gap-2 items-center">
+          <label className="text-black text-lg">Created By:</label>
+          <h1 className="text-blue-500 font-sans">
+            {complaint?.author?.firstName} {complaint?.author?.lastName}
+          </h1>
+        </div>
+      </div>
+
+      {/* Comment Section */}
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-full">
+          <label
+            htmlFor="message"
+            className="block mb-2 text-2xl  text-black"
+          >
+            Your message
+          </label>
+          <textarea
+            id="message"
+            rows="3"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            className="block w-full p-3 text-black bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-300 dark:text-white dark:border-gray-600"
+            placeholder="Write your thoughts here..."
+          ></textarea>
+
+          <button
+            className="mt-3 py-2 px-6 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-200 ease-in-out"
+            onClick={handleAddComment}
+          >
+            Add Comment
+          </button>
+        </div>
+        <button
+          onClick={() => {
+            handleGetComments();
+            setShowComments(true);
+          }}
+          disabled={isLoadingComments}
+          className="py-2 px-6 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-200 ease-in-out"
+        >
+          {isLoadingComments ? "Loading Comments..." : "Show All Comments"}
+        </button>
+
+        {/* Comments Display */}
+        {showComments && (
+          <ul className="w-full text-white">
+            {comments.map((comment) => (
+              <div
+                key={comment._id}
+                className="bg-gray-900 p-4 rounded-xl mb-4 shadow-md"
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="font-medium">{comment?.userName}</h3>
+                  <time className="text-xs" dateTime={comment.createdAt}>
+                    {formattedDate(comment.createdAt)}
+                  </time>
+                </div>
+                <p className="text-sm">{comment.text}</p>
+                <div className="flex gap-4 mt-2">
+                  <button
+                    className="flex items-center text-yellow-200 hover:text-yellow-300 transition duration-150"
+                    onClick={(e) => handleCommentUpvote(e, comment._id)}
+                  >
+                    <BiSolidUpvote /> {comment.upVotedBy.length}
+                  </button>
+                  <button
+                    className="flex items-center text-yellow-200 hover:text-yellow-300 transition duration-150"
+                    onClick={(e) => handleCommentDownvote(e, comment._id)}
+                  >
+                    <BiSolidDownvote /> {comment.downVotedBy.length}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </ul>
+        )}
+      </div>
+    </form>
+  </div>
+</>
+
   );
 };
 
